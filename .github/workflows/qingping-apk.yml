@@ -26,7 +26,10 @@ jobs:
           mkdir -p qingping-project
           tar -xJf qingping-build-source.tar.xz -C qingping-project
       - name: Install Android SDK
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+        run: |
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | head -1)"
+          "$SDKMANAGER" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Assemble signed debug APK
         working-directory: qingping-project
         run: gradle --no-daemon assembleDebug --stacktrace
